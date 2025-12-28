@@ -10,6 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 import HomeScreen from '../screens/HomeScreen';
 import LoginSelectionScreen from '../screens/LoginSelectionScreen';
 import LoginScreen from '../screens/LoginScreen';
+import TeacherNavigator from './TeacherNavigator';
 
 const Stack = createStackNavigator();
 
@@ -50,7 +51,7 @@ const AppStack = () => (
 );
 
 const AppNavigator = () => {
-    const { userToken, isLoading } = useAuth();
+    const { userToken, isLoading, userRole } = useAuth();
     const { theme, isDarkMode } = useTheme();
 
     if (isLoading) {
@@ -61,10 +62,17 @@ const AppNavigator = () => {
         );
     }
 
+    // Role-based Navigation
     return (
         <NavigationContainer>
             <StatusBar style={isDarkMode ? "light" : "dark"} />
-            {userToken ? <AppStack /> : <AuthStack />}
+            {!userToken ? (
+                <AuthStack />
+            ) : userRole === 'teacher' ? (
+                <TeacherNavigator />
+            ) : (
+                <AppStack />
+            )}
         </NavigationContainer>
     );
 };
