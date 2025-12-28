@@ -184,5 +184,36 @@ export const teacherApi = {
             console.error("Error deleting assignment:", error);
             throw error;
         }
+    },
+
+    // --- Lectures / Timetable ---
+    getClassTimeTable: async (className, section) => {
+        try {
+            const response = await apiClient.get(`/timeTable/getClassTimeTable?className=${className}&section=${section}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching timetable:", error);
+            throw error;
+        }
+    },
+
+    createClassTimeTable: async (timetableData) => {
+        try {
+            const response = await apiClient.post('/timeTable/createClassTimeTable', timetableData);
+            return response.data;
+        } catch (error) {
+            console.error("Error creating timetable:", error);
+            throw error;
+        }
+    },
+
+    deleteClassTimeTable: async (id) => {
+        try {
+            const response = await apiClient.delete(`/timeTable/deleteClassTimeTable/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error deleting timetable:", error);
+            throw error;
+        }
     }
 };
