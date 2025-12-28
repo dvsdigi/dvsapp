@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../theme';
 import { StatusBar } from 'expo-status-bar';
 
 // Auth Screens
@@ -15,14 +16,18 @@ const Stack = createStackNavigator();
 // Placeholder Dashboard
 const DashboardScreen = ({ navigation }) => {
     const { logout, userRole, userInfo } = useAuth();
+    const { theme, isDarkMode } = useTheme();
+
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0f172a' }}>
-            <Text style={{ color: '#fff', fontSize: 24, marginBottom: 20 }}>Welcome, {userRole}!</Text>
-            <Text style={{ color: '#94a3b8', marginBottom: 40 }}>{userInfo?.email}</Text>
-            <Text style={{ color: '#4f46e5', marginBottom: 20, fontWeight: 'bold', onPress: () => alert('Dashboard coming soon!') }}>
-                Dashboard UI Pending
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
+            <Text style={{ color: theme.textPrimary, fontSize: 24, marginBottom: 20 }}>Welcome, {userRole}!</Text>
+            <Text style={{ color: theme.textSecondary, marginBottom: 40 }}>{userInfo?.email}</Text>
+            <Text style={{ color: theme.primary, marginBottom: 20, fontWeight: 'bold' }}>
+                Dashboard UI Coming Soon
             </Text>
-            <Text style={{ color: 'red', marginTop: 20 }} onPress={logout}>Logout</Text>
+            <TouchableOpacity onPress={logout}>
+                <Text style={{ color: theme.error, fontSize: 16, fontWeight: '600' }}>Logout</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -46,18 +51,19 @@ const AppStack = () => (
 
 const AppNavigator = () => {
     const { userToken, isLoading } = useAuth();
+    const { theme, isDarkMode } = useTheme();
 
     if (isLoading) {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0f172a' }}>
-                <ActivityIndicator size="large" color="#4f46e5" />
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
+                <ActivityIndicator size="large" color={theme.primary} />
             </View>
         );
     }
 
     return (
         <NavigationContainer>
-            <StatusBar style="light" />
+            <StatusBar style={isDarkMode ? "light" : "dark"} />
             {userToken ? <AppStack /> : <AuthStack />}
         </NavigationContainer>
     );

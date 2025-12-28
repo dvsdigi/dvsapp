@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import * as Font from 'expo-font'; // Correct import for expo-font hooks if used, or just loadAsync
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider } from './src/context/AuthContext';
+import { ThemeProvider, useTheme } from './src/theme';
 import AppNavigator from './src/navigation/AppNavigator';
 
-export default function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
+// Inner component to access theme after provider
+const AppContent = () => {
+  const { theme, isLoading } = useTheme();
 
-  const loadFonts = async () => {
-    // In a real premium app, we would load custom fonts here like Inter or Poppins
-    // For now, we rely on system fonts or generic sans-serif, 
-    // but the hook is here for future expansion.
-    await new Promise(resolve => setTimeout(resolve, 100)); // Simulate loading
-    setFontsLoaded(true);
-  };
-
-  useEffect(() => {
-    loadFonts();
-  }, []);
-
-  if (!fontsLoaded) {
+  if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0f172a' }}>
         <ActivityIndicator size="large" color="#4f46e5" />
@@ -27,9 +18,19 @@ export default function App() {
     );
   }
 
+  return <AppNavigator />;
+};
+
+export default function App() {
   return (
-    <AuthProvider>
-      <AppNavigator />
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <AppContent />
+          </AuthProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
