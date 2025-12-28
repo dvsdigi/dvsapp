@@ -10,11 +10,12 @@ import AttendanceScreen from '../screens/teacher/modules/AttendanceScreen';
 import ExamsScreen from '../screens/teacher/modules/ExamsScreen';
 import {
     LecturesScreen, StudyScreen, CurriculumScreen, PayrollScreen,
-    AIFeaturesScreen, AboutMeScreen
+    AIFeaturesScreen
 } from '../screens/teacher/TeacherModules';
 import AssignmentsListScreen from '../screens/teacher/modules/AssignmentsListScreen';
 import CreateAssignmentScreen from '../screens/teacher/modules/CreateAssignmentScreen';
 import AssignmentDetailsScreen from '../screens/teacher/modules/AssignmentDetailsScreen';
+import AboutMeScreen from '../screens/teacher/modules/AboutMeScreen';
 
 const Stack = createStackNavigator();
 
