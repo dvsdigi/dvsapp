@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from '../api/apiClient';
+import { API_URL } from '../config/apiConfig';
+import { PushNotificationService } from '../services/PushNotificationService';
 import { ENDPOINTS } from '../config/apiConfig';
 
 export const AuthContext = createContext();
@@ -10,6 +11,14 @@ export const AuthProvider = ({ children }) => {
     const [userToken, setUserToken] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
     const [userRole, setUserRole] = useState(null);
+
+    // Push Notification Init
+    useEffect(() => {
+        if (userInfo) {
+            console.log("AuthContext: User logged in, initializing Push Notifications...");
+            PushNotificationService.registerForPushNotificationsAsync();
+        }
+    }, [userInfo]);
 
     // Check if user is already logged in
     const isLoggedIn = async () => {

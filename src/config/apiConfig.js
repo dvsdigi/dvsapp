@@ -27,8 +27,9 @@ const getBaseUrl = () => {
 };
 
 export const API_BASE_URL = getBaseUrl();
+export const API_URL = `${API_BASE_URL}/api/v1`;
 // export const API_URL = 'http://192.168.1.5:8000/api/v1'; // Local Dev
-export const API_URL = 'https://dvsserver-d7fk.onrender.com/api/v1'; // Production
+// export const API_URL = 'https://dvsserver-d7fk.onrender.com/api/v1'; // Production
 
 console.log('🔗 [Mobile Config] API URL set to:', API_URL);
 

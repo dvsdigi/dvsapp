@@ -19,6 +19,7 @@ import AboutMeScreen from '../screens/teacher/modules/AboutMeScreen';
 import LecturesScreen from '../screens/teacher/modules/LecturesScreen';
 import CreateExamScreen from '../screens/teacher/modules/CreateExamScreen';
 import ExamsScreen from '../screens/teacher/modules/ExamsScreen';
+import NotificationsScreen from '../screens/teacher/modules/NotificationsScreen';
 
 const Stack = createStackNavigator();
 
@@ -99,6 +100,7 @@ const TeacherNavigator = () => {
                 options={{ headerShown: false }}
             />
             <Stack.Screen name="Exams" component={WrappedExams} />
+            <Stack.Screen name="Notifications" component={NotificationsScreen} options={{ headerShown: false }} />
             <Stack.Screen
                 name="CreateExam"
                 component={CreateExamScreen}

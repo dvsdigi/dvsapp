@@ -249,5 +249,16 @@ export const teacherApi = {
             console.error("Error deleting timetable:", error);
             throw error;
         }
+    },
+
+    // Push Notifications
+    registerPushToken: async (token) => {
+        try {
+            const response = await apiClient.post('/notifications/push/register', { token });
+            return response.data;
+        } catch (error) {
+            console.error("Error registering push token:", error);
+            // Don't throw, just log, as it shouldn't block app usage
+        }
     }
 };

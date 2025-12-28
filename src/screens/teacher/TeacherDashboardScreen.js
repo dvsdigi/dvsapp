@@ -177,10 +177,10 @@ const TeacherDashboardScreen = ({ navigation, openSidebar }) => {
                             <TouchableOpacity onPress={toggleTheme}>
                                 {isDarkMode ? <Sun size={24} color="#FFF" /> : <Moon size={24} color="#FFF" />}
                             </TouchableOpacity>
-                            <View style={styles.notificationBadge}>
+                            <TouchableOpacity style={styles.notificationBadge} onPress={() => navigation.navigate('Notifications')}>
                                 <Bell size={24} color="#FFF" />
                                 <View style={styles.redDot} />
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <Text style={styles.classInfoText}>Class Teacher: {userInfo?.class || "10"} - {userInfo?.section || "A"}</Text>
