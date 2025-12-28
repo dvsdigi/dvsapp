@@ -70,12 +70,29 @@ const TeacherDashboardScreen = ({ navigation, openSidebar }) => {
                 const exams = await teacherApi.getExams(assignedClass, assignedSection);
                 console.log("Fetched Exams:", exams?.length);
                 if (exams && Array.isArray(exams)) {
-                    // Filter for future exams and sort
+                    // Helper to parse DD-MM-YYYY or ISO
+                    const parseDate = (d) => {
+                        if (!d) return new Date(0); // far past
+                        if (typeof d === 'string' && d.includes('-') && d.split('-')[0].length === 2) {
+                            const [day, month, year] = d.split('-');
+                            return new Date(`${year}-${month}-${day}`);
+                        }
+                        return new Date(d);
+                    };
+
                     const now = new Date();
+                    // Set now to start of day to show today's exams as upcoming/active
+                    now.setHours(0, 0, 0, 0);
+
                     const futureExams = exams
-                        .filter(e => new Date(e.examDate) >= now)
-                        .sort((a, b) => new Date(a.examDate) - new Date(b.examDate))
-                        .slice(0, 3); // Take top 3
+                        .map(e => ({
+                            ...e,
+                            _parsedDate: parseDate(e.startDate) // Use startDate for sorting
+                        }))
+                        .filter(e => e._parsedDate >= now)
+                        .sort((a, b) => a._parsedDate - b._parsedDate)
+                        .slice(0, 3);
+
                     setUpcomingExams(futureExams);
                 } else {
                     setUpcomingExams([]);
@@ -287,24 +304,32 @@ const TeacherDashboardScreen = ({ navigation, openSidebar }) => {
                     </View>
 
                     {upcomingExams.length > 0 ? (
-                        upcomingExams.map((exam, index) => (
-                            <View key={index} style={[styles.examCard, { backgroundColor: theme.surface, borderLeftColor: theme.primary }]}>
-                                <View style={styles.examDateBox}>
-                                    <Text style={[styles.examDateDay, { color: theme.primary }]}>{new Date(exam.examDate).getDate()}</Text>
-                                    <Text style={[styles.examDateMonth, { color: theme.textSecondary }]}>{new Date(exam.examDate).toLocaleString('default', { month: 'short' })}</Text>
+                        upcomingExams.map((exam, index) => {
+                            const dateObj = exam._parsedDate || new Date();
+                            return (
+                                <View key={index} style={[styles.examCard, { backgroundColor: theme.surface, borderLeftColor: theme.primary }]}>
+                                    <View style={styles.examDateBox}>
+                                        <Text style={[styles.examDateDay, { color: theme.primary }]}>{dateObj.getDate()}</Text>
+                                        <Text style={[styles.examDateMonth, { color: theme.textSecondary }]}>
+                                            {dateObj.toLocaleString('default', { month: 'short' })}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.examInfo}>
+                                        <Text style={[styles.examTitle, { color: theme.textPrimary }]}>{exam.name}</Text>
+                                        <Text style={[styles.examSubject, { color: theme.textSecondary }]}>
+                                            {exam.subjects?.length ? `${exam.subjects.length} Subjects` : "General"}
+                                        </Text>
+                                    </View>
+                                    <View style={[styles.examTimeBadge, { backgroundColor: theme.background }]}>
+                                        <Clock size={12} color={theme.textSecondary} />
+                                        <Text style={[styles.examTimeText, { color: theme.textSecondary }]}>
+                                            {/* Time might not be in Exam object, usually full day. Showing Type instead if time missing */}
+                                            {exam.examType}
+                                        </Text>
+                                    </View>
                                 </View>
-                                <View style={styles.examInfo}>
-                                    <Text style={[styles.examTitle, { color: theme.textPrimary }]}>{exam.examName}</Text>
-                                    <Text style={[styles.examSubject, { color: theme.textSecondary }]}>{exam.subject || "General"}</Text>
-                                </View>
-                                <View style={[styles.examTimeBadge, { backgroundColor: theme.background }]}>
-                                    <Clock size={12} color={theme.textSecondary} />
-                                    <Text style={[styles.examTimeText, { color: theme.textSecondary }]}>
-                                        {new Date(exam.examDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </Text>
-                                </View>
-                            </View>
-                        ))
+                            );
+                        })
                     ) : (
                         <View style={[styles.emptyCard, { backgroundColor: theme.surface }]}>
                             <Text style={{ textAlign: 'center', color: theme.textSecondary }}>No upcoming exams scheduled.</Text>

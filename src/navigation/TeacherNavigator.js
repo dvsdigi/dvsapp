@@ -7,7 +7,7 @@ import TeacherSidebar from '../screens/teacher/TeacherSidebar';
 import TeacherDashboardScreen from '../screens/teacher/TeacherDashboardScreen';
 import MyStudentsScreen from '../screens/teacher/modules/MyStudentsScreen';
 import AttendanceScreen from '../screens/teacher/modules/AttendanceScreen';
-import ExamsScreen from '../screens/teacher/modules/ExamsScreen';
+
 import {
     StudyScreen, CurriculumScreen, PayrollScreen,
     AIFeaturesScreen
@@ -17,6 +17,8 @@ import CreateAssignmentScreen from '../screens/teacher/modules/CreateAssignmentS
 import AssignmentDetailsScreen from '../screens/teacher/modules/AssignmentDetailsScreen';
 import AboutMeScreen from '../screens/teacher/modules/AboutMeScreen';
 import LecturesScreen from '../screens/teacher/modules/LecturesScreen';
+import CreateExamScreen from '../screens/teacher/modules/CreateExamScreen';
+import ExamsScreen from '../screens/teacher/modules/ExamsScreen';
 
 const Stack = createStackNavigator();
 
@@ -97,6 +99,11 @@ const TeacherNavigator = () => {
                 options={{ headerShown: false }}
             />
             <Stack.Screen name="Exams" component={WrappedExams} />
+            <Stack.Screen
+                name="CreateExam"
+                component={CreateExamScreen}
+                options={{ headerShown: false }}
+            />
             <Stack.Screen name="Lectures" component={WrappedLectures} />
             <Stack.Screen name="Study" component={WrappedStudy} />
             <Stack.Screen name="Curriculum" component={WrappedCurriculum} />

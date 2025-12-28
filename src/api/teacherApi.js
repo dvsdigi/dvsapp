@@ -113,6 +113,36 @@ export const teacherApi = {
         }
     },
 
+    createExam: async (examData) => {
+        try {
+            const response = await apiClient.post('/exam/exams', examData);
+            return response.data;
+        } catch (error) {
+            console.error("Error creating exam:", error);
+            throw error;
+        }
+    },
+
+    updateExam: async (id, examData) => {
+        try {
+            const response = await apiClient.put(`/exam/exams/${id}`, examData);
+            return response.data;
+        } catch (error) {
+            console.error("Error updating exam:", error);
+            throw error;
+        }
+    },
+
+    deleteExam: async (id) => {
+        try {
+            const response = await apiClient.delete(`/exam/exams/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error deleting exam:", error);
+            throw error;
+        }
+    },
+
 
 
     // Get Marks
@@ -137,9 +167,13 @@ export const teacherApi = {
         }
     },
 
-    getAssignments: async () => {
+    getAssignments: async (classId, sectionId) => {
         try {
-            const response = await apiClient.get('/teacher/getAllAssignment');
+            let url = '/teacher/getAllAssignment';
+            if (classId && sectionId) {
+                url += `?className=${classId}&section=${sectionId}`;
+            }
+            const response = await apiClient.get(url);
             return response.data;
         } catch (error) {
             console.error("Error fetching assignments:", error);
