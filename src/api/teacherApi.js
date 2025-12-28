@@ -32,6 +32,73 @@ export const teacherApi = {
         }
     },
 
+    // --- Attendance (My Attendance) ---
+    getAttendanceStatus: async () => {
+        try {
+            const response = await apiClient.get('/attendance/status/today');
+            return response.data;
+        } catch (error) {
+            console.error("Error getting attendance status:", error);
+            throw error;
+        }
+    },
+
+    clockIn: async (payload) => {
+        try {
+            const response = await apiClient.post('/attendance/clock-in', payload);
+            return response.data;
+        } catch (error) {
+            console.error("Error clocking in:", error);
+            throw error;
+        }
+    },
+
+    clockOut: async (payload) => {
+        try {
+            const response = await apiClient.post('/attendance/clock-out', payload);
+            return response.data;
+        } catch (error) {
+            console.error("Error clocking out:", error);
+            throw error;
+        }
+    },
+
+    getAttendanceActivity: async (date, status = "") => {
+        try {
+            let query = `?date=${date}`;
+            if (status) query += `&status=${status}`;
+            const response = await apiClient.get(`/attendance/activity${query}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching activity log:", error);
+            throw error;
+        }
+    },
+
+    // --- Student Attendance ---
+    submitStudentAttendance: async (payload) => {
+        try {
+            // Endpoint from web client: createAttendance -> teacher/createAttendance
+            const response = await apiClient.post('/teacher/createAttendance', payload);
+            return response.data;
+        } catch (error) {
+            console.error("Error submitting student attendance:", error);
+            throw error;
+        }
+    },
+
+    getStudentAttendance: async (year, month) => {
+        try {
+            const response = await apiClient.get('/teacher/getAttendance', {
+                params: { year, month }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching student attendance:", error);
+            throw error;
+        }
+    },
+
     // Get Exams
     getExams: async (classId, sectionId) => {
         try {
@@ -44,16 +111,7 @@ export const teacherApi = {
         }
     },
 
-    // Create Attendance
-    createAttendance: async (payload) => {
-        try {
-            const response = await apiClient.post(`/attendance/createattendance`, payload);
-            return response.data;
-        } catch (error) {
-            console.error("Error creating attendance:", error);
-            throw error;
-        }
-    },
+
 
     // Get Marks
     getMarks: async (classId, sectionId) => {
