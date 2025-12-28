@@ -12,7 +12,7 @@ const menuItems = [
     { key: 'Dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { key: 'MyStudents', label: 'My Students', icon: Users },
     { key: 'Attendance', label: 'Attendance', icon: CalendarCheck },
-    { key: 'Assignments', label: 'Assignments', icon: FileText },
+    { key: 'AssignmentsList', label: 'Assignments', icon: FileText },
     { key: 'Exams', label: 'Exams & Results', icon: GraduationCap },
     { key: 'Lectures', label: 'Lectures', icon: Video },
     { key: 'Study', label: 'Study Material', icon: BookOpen },

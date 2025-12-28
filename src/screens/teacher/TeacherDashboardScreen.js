@@ -204,7 +204,7 @@ const TeacherDashboardScreen = ({ navigation, openSidebar }) => {
                             desc="Create & review tasks"
                             icon={BookOpen}
                             colors={['#3B82F6', '#2563EB']}
-                            onPress={() => navigation.navigate('Homework')}
+                            onPress={() => navigation.navigate('AssignmentsList')}
                         />
                         <QuickActionButton
                             title="My Students"

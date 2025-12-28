@@ -9,10 +9,12 @@ import MyStudentsScreen from '../screens/teacher/modules/MyStudentsScreen';
 import AttendanceScreen from '../screens/teacher/modules/AttendanceScreen';
 import ExamsScreen from '../screens/teacher/modules/ExamsScreen';
 import {
-    AssignmentsScreen,
     LecturesScreen, StudyScreen, CurriculumScreen, PayrollScreen,
     AIFeaturesScreen, AboutMeScreen
 } from '../screens/teacher/TeacherModules';
+import AssignmentsListScreen from '../screens/teacher/modules/AssignmentsListScreen';
+import CreateAssignmentScreen from '../screens/teacher/modules/CreateAssignmentScreen';
+import AssignmentDetailsScreen from '../screens/teacher/modules/AssignmentDetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -59,7 +61,7 @@ const Wrap = (Component, routeName) => {
 const WrappedDashboard = Wrap(TeacherDashboardScreen, 'Dashboard');
 const WrappedMyStudents = Wrap(MyStudentsScreen, 'MyStudents');
 const WrappedAttendance = Wrap(AttendanceScreen, 'Attendance');
-const WrappedAssignments = Wrap(AssignmentsScreen, 'Assignments');
+const WrappedAssignmentsList = Wrap(AssignmentsListScreen, 'Assignments');
 const WrappedExams = Wrap(ExamsScreen, 'Exams');
 const WrappedLectures = Wrap(LecturesScreen, 'Lectures');
 const WrappedStudy = Wrap(StudyScreen, 'Study');
@@ -81,7 +83,17 @@ const TeacherNavigator = () => {
             {/* Modules - Each wrapped with sidebar access logic */}
             <Stack.Screen name="MyStudents" component={WrappedMyStudents} />
             <Stack.Screen name="Attendance" component={WrappedAttendance} />
-            <Stack.Screen name="Assignments" component={WrappedAssignments} />
+            <Stack.Screen name="AssignmentsList" component={WrappedAssignmentsList} />
+            <Stack.Screen
+                name="CreateAssignment"
+                component={CreateAssignmentScreen}
+                options={{ headerShown: true, title: "Create Assignment" }}
+            />
+            <Stack.Screen
+                name="AssignmentDetails"
+                component={AssignmentDetailsScreen}
+                options={{ headerShown: false }}
+            />
             <Stack.Screen name="Exams" component={WrappedExams} />
             <Stack.Screen name="Lectures" component={WrappedLectures} />
             <Stack.Screen name="Study" component={WrappedStudy} />

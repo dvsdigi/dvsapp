@@ -1,4 +1,6 @@
 import apiClient from './apiClient';
+import { API_URL } from '../config/apiConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const teacherApi = {
     // Get all students for a class/section
@@ -120,6 +122,66 @@ export const teacherApi = {
             return response.data;
         } catch (error) {
             console.error("Error fetching marks:", error);
+            throw error;
+        }
+    },
+
+    // --- Assignments ---
+    getAllClasses: async () => {
+        try {
+            const response = await apiClient.get('/adminRoute/class');
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching classes:", error);
+            throw error;
+        }
+    },
+
+    getAssignments: async () => {
+        try {
+            const response = await apiClient.get('/teacher/getAllAssignment');
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching assignments:", error);
+            throw error;
+        }
+    },
+
+    createAssignment: async (formData) => {
+        try {
+            console.log("Using native fetch for multipart upload...");
+            const token = await AsyncStorage.getItem('userToken');
+
+            // Bypass Axios and use native Fetch for reliable FormData handling
+            const response = await fetch(`${API_URL}/adminRoute/task`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    // Explicitly DO NOT set Content-Type here; fetch sets it with boundary automatically
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                console.error("Fetch error:", JSON.stringify(result));
+                throw new Error(result.message || "Failed to create assignment");
+            }
+
+            return result;
+        } catch (error) {
+            console.error("Error creating assignment (Fetch):", error);
+            throw error;
+        }
+    },
+
+    deleteAssignment: async (id) => {
+        try {
+            const response = await apiClient.delete(`/adminRoute/task/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error deleting assignment:", error);
             throw error;
         }
     }
